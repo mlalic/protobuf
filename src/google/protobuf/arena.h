@@ -110,6 +110,9 @@ inline void arena_free(void* object, size_t size) {
   ::operator delete(object);
 #endif
 }
+inline void* arena_alloc(size_t size) {
+  return ::operator new(size);
+}
 
 }  // namespace internal
 
@@ -151,7 +154,7 @@ struct ArenaOptions {
         max_block_size(kDefaultMaxBlockSize),
         initial_block(NULL),
         initial_block_size(0),
-        block_alloc(&::operator new),
+        block_alloc(&internal::arena_alloc),
         block_dealloc(&internal::arena_free),
         on_arena_init(NULL),
         on_arena_reset(NULL),
